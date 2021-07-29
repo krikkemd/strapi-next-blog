@@ -15,12 +15,12 @@
     "title": {
       "type": "string",
       "required": true,
-      "unique": true
+      "unique": false
     },
     "slug": {
       "type": "string",
-      "required": true,
-      "unique": true
+      "required": false,
+      "unique": false
     },
     "body": {
       "type": "richtext",

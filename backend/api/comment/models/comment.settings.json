@@ -20,8 +20,8 @@
       "required": true
     },
     "post": {
-      "model": "post",
-      "via": "comments"
+      "via": "comments",
+      "model": "post"
     },
     "user": {
       "plugin": "users-permissions",
