@@ -1,6 +1,6 @@
 import { client } from '../apolloClient';
 import Link from 'next/link';
-import { GET_ALL_POSTS, GET_SINGLE_POST } from '../graphql/posts';
+import { GET_ALL_POSTS, GET_POSTS_BY_SLUG } from '../graphql/posts';
 
 export default function Post({ post }) {
   console.log(post);
@@ -10,7 +10,8 @@ export default function Post({ post }) {
       <Link href='/'>
         <a>Go Home</a>
       </Link>
-      {/* <h2>{post.title}</h2> */}
+      <h2>{post.title}</h2>
+      <p>{post.body}</p>
     </div>
   );
 }
@@ -31,7 +32,7 @@ export async function getStaticPaths() {
   return {
     // paths: [{ params: { slug: post.slug } }],
     paths,
-    fallback: false, // false for static generation, true for incremental static generation.
+    fallback: true, // false for static generation, true for incremental static generation.
   };
 }
 
@@ -47,14 +48,15 @@ export async function getStaticProps({ params }) {
 
   // console.log(res);
 
-  // const { data } = await client.query({
-  //   query: GET_SINGLE_POST,
-  //   variables: slug,
-  // });
+  const { data } = await client.query({
+    query: GET_POSTS_BY_SLUG,
+    variables: slug,
+  });
 
-  // console.log(data);
+
+  const post = data.posts.find(post => post.slug === slug)
 
   return {
-    props: {},
+    props: {post},
   };
 }
