@@ -7,20 +7,10 @@ incremental static generation
 - server side rendered
 - when 1st visit happens: generate the page
 - when 2nd+ visits happen: serve static page
-
 */
 
-export async function getStaticProps() {
-  console.log('i am on the server, look for me in the terminal. not in the client console :)');
-  // Get posts from our api
-  const res = await fetch('http://localhost:1337/posts');
-  const posts = await res.json();
-
-  return {
-    props: { posts },
-  };
-}
-
+import { client } from '../apolloClient';
+import { GET_ALL_POSTS } from '../graphql/posts';
 import Link from 'next/link';
 
 export default function Home({ posts }) {
@@ -41,4 +31,22 @@ export default function Home({ posts }) {
         ))}
     </div>
   );
+}
+
+export async function getStaticProps() {
+  console.log('i am on the server, look for me in the terminal. not in the client console :)');
+  // Get posts from our api
+  // const res = await fetch('http://localhost:1337/posts');
+  // const posts = await res.json();
+
+  const { data } = await client.query({
+    query: GET_ALL_POSTS,
+  });
+  console.log(data);
+
+  return {
+    props: {
+      posts: data.posts,
+    },
+  };
 }
